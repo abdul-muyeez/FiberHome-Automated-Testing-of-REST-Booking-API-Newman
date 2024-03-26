@@ -1,0 +1,676 @@
+{
+	"info": {
+		"_postman_id": "8c8ff9c8-8262-4f9a-8d40-dca260de2063",
+		"name": "Fiberhome",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33749765"
+	},
+	"item": [
+		{
+			"name": "Create Booking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var responseCode= pm.response.code\r",
+							"console.log(responseCode)\r",
+							"\r",
+							"if (responseCode==200){\r",
+							" \r",
+							"    var fiberdata= pm.response.json()\r",
+							"        pm.environment.set(\"id\", fiberdata.bookingid)\r",
+							"        var id = pm.environment.get(\"id\")\r",
+							"         pm.test(`Booking IS Successful. ID-${id}`, function(){ \r",
+							"            pm.expect(pm.environment.get(\"id\")).to.eql(fiberdata.bookingid)\r",
+							"    })\r",
+							"\r",
+							"}else if(responseCode==404){\r",
+							"    pm.test(\"Booking is Unsuccessful !\")\r",
+							"}else if(responseCode==500){\r",
+							"    pm.test(\"Server Error\")\r",
+							"}\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"//Random Values Generation and Set it into Environment\r",
+							"pm.environment.set(\"firstname\", pm.variables.replaceIn(\"{{$randomFirstName}}\"))\r",
+							"pm.environment.set(\"lastname\", pm.variables.replaceIn(\"{{$randomLastName}}\"));\r",
+							"\r",
+							"//Totalprice\r",
+							"var min = 500\r",
+							"var max = 1000\r",
+							"var totalprice = Math.floor(Math.random() * (max - min + 1)) + min;\r",
+							"pm.environment.set(\"totalprice\", totalprice)\r",
+							"\r",
+							"//DepositPaid\r",
+							"var depositpaid= pm.variables.replaceIn(\"{{$randomBoolean}}\")\r",
+							"pm.environment.set(\"depositpaid\", depositpaid)\r",
+							"\r",
+							"//Date Format (YYYY-MM-DD)\r",
+							"const date= require('moment')\r",
+							"const today= date()\r",
+							"var checkin= today.format(\"YYYY-MM-DD\")\r",
+							"pm.environment.set(\"checkin\", checkin)\r",
+							"var checkout= today.add(5,'d').format(\"YYYY-MM-DD\")\r",
+							"pm.environment.set(\"checkout\", checkout)\r",
+							"\r",
+							"//Randomly Select Additional Needs from Data\r",
+							"const service = [\"Breakfast\", \"Lunch\", \"Dinner\", \"Airport Pickup\", \"Car Parking\"]\r",
+							"const selected = service[Math.floor(Math.random() * service.length)]\r",
+							"pm.environment.set(\"extraNeeds\", selected)\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"firstname\" : \"{{firstname}}\",\r\n\t\"lastname\" : \"{{lastname}}\",\r\n\t\"totalprice\" : {{totalprice}},\r\n\t\"depositpaid\" : {{depositpaid}},\r\n\t\"bookingdates\" : {\r\n    \t\"checkin\" : \"{{checkin}}\",\r\n    \t\"checkout\" : \"{{checkout}}\"\r\n\t},\r\n\t\"additionalneeds\" : \"{{extraNeeds}}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseurl}}/booking/",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"booking",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Booking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Get the response code\r",
+							"const id = pm.environment.get(\"id\")\r",
+							"var responseCode= pm.response.code\r",
+							"console.log(responseCode)\r",
+							"// Handle the response based on the code\r",
+							"if(responseCode==200){\r",
+							"    // Parse the response as JSON\r",
+							"    var fiberdata= pm.response.json()\r",
+							"     pm.test(`Booking ID-${id}`)\r",
+							"    // Test validations for each data point\r",
+							"    pm.test(\"Inserted First Name Validation\", function(){ \r",
+							"        pm.expect(pm.environment.get(\"firstname\")).to.eql(fiberdata.firstname)\r",
+							"    })\r",
+							"\r",
+							"    pm.test(\"Inserted Last Name Validation\", function(){\r",
+							"        pm.expect(pm.environment.get(\"lastname\")).to.eql(fiberdata.lastname)\r",
+							"    })\r",
+							"\r",
+							"    pm.test(\"Inserted Checkin Date Validation\", function(){\r",
+							"     pm.expect(pm.environment.get(\"checkin\")).to.eql(fiberdata.bookingdates.checkin)\r",
+							"    })\r",
+							"    pm.test(\"Inserted Checkput Date Validation\", function(){\r",
+							"     pm.expect(pm.environment.get(\"checkout\")).to.eql(fiberdata.bookingdates.checkout)\r",
+							"    })\r",
+							"    pm.test(\"Inserted Total Price Validation\", function(){\r",
+							"        pm.expect(pm.environment.get(\"totalprice\")).to.eql(fiberdata.totalprice)\r",
+							"    })\r",
+							"    pm.test(\"Deposit Paid Validation\", function(){\r",
+							"        pm.expect(pm.environment.get(\"depositpaid\")).to.eql(fiberdata.depositpaid.toString())\r",
+							"    })\r",
+							"\r",
+							"}else if(responseCode==404){\r",
+							"    pm.test(\"Not Found\")\r",
+							"}else if(responseCode==500){\r",
+							"    pm.test(\"Server Error\")\r",
+							"}else {\r",
+							"  pm.test(\"Unexpected Status Code\", function () {\r",
+							"    pm.expect(responseCode).to.be.oneOf([200, 404, 500])\r",
+							"  })\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseurl}}/booking/{{id}}",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"booking",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Access Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var responseCode= pm.response.code\r",
+							"console.log(responseCode)\r",
+							"\r",
+							"if (responseCode==200){\r",
+							" \r",
+							"    var fiberdata= pm.response.json()\r",
+							"\r",
+							"        pm.environment.set(\"token\", fiberdata.token)\r",
+							"\r",
+							"         pm.test(\"Access Token Created\", function(){ \r",
+							"        pm.expect(pm.environment.get(\"token\")).to.eql(fiberdata.token)\r",
+							"    })\r",
+							"\r",
+							"}else if(responseCode==404){\r",
+							"    pm.test(\"Acces Token not Created\")\r",
+							"}else if(responseCode==500){\r",
+							"    pm.test(\"Server Error\")\r",
+							"}else {\r",
+							"    pm.test(\"Something went wrong\")\r",
+							"}\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"username\": \"admin\",\r\n\t\"password\": \"password123\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseurl}}/auth",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Booking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const id = pm.environment.get(\"id\")\r",
+							"var responseCode= pm.response.code\r",
+							"console.log(responseCode)\r",
+							"\r",
+							"if (responseCode==200){\r",
+							" \r",
+							"    var fiberdata= pm.response.json()\r",
+							"    \r",
+							"        pm.environment.set(\"Updated\", fiberdata.token)\r",
+							"        \r",
+							"         pm.test(`Successfully Updated Booking ID-${id}`, function(){ \r",
+							"        pm.expect(pm.environment.get(\"Updated\")).to.eql(fiberdata.Updated)\r",
+							"    })\r",
+							"\r",
+							"}else if(responseCode==404){\r",
+							"    pm.test(\"Not Updated\")\r",
+							"}else if(responseCode==500){\r",
+							"    pm.test(\"Server Error\")\r",
+							"}\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"//Generate Random Values tehn set it into Environment\r",
+							"\r",
+							"var firstname= pm.variables.replaceIn(\"{{$randomFirstName}}\")\r",
+							"pm.environment.set(\"ufirstname\", firstname)\r",
+							"var lastname= pm.variables.replaceIn(\"{{$randomLastName}}\")\r",
+							"pm.environment.set(\"ulastname\", lastname)\r",
+							"\r",
+							"//totalprice Update\r",
+							"var min = 600\r",
+							"var max = 900\r",
+							"var totalprice = Math.floor(Math.random() * (max - min + 1)) + min;\r",
+							"pm.environment.set(\"utotalprice\", totalprice)\r",
+							"//DepositPaid\r",
+							"var depositpaid= pm.variables.replaceIn(\"{{$randomBoolean}}\")\r",
+							"pm.environment.set(\"udepositpaid\", depositpaid)\r",
+							"\r",
+							"//Date\r",
+							"const date= require('moment')\r",
+							"const today= date()\r",
+							"var checkin= today.add(4,'d').format(\"YYYY-MM-DD\")\r",
+							"pm.environment.set(\"ucheckin\", checkin)\r",
+							"var checkout= today.add(6,'d').format(\"YYYY-MM-DD\")\r",
+							"pm.environment.set(\"ucheckout\", checkout)\r",
+							"\r",
+							"// RANDOMLY SELECT MEAL THEN SET IT TO ENVIRONMENT\r",
+							"const service = [\"Breakfast\", \"Lunch\", \"Dinner\", \"Airport Pickup\", \"Pet Service\"]\r",
+							"const selected = service[Math.floor(Math.random() * service.length)]\r",
+							"pm.environment.set(\"uextraNeeds\", selected)\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token={{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"firstname\" : \"{{ufirstname}}\",\r\n\t\"lastname\" : \"{{ulastname}}\",\r\n\t\"totalprice\" : {{utotalprice}},\r\n\t\"depositpaid\" : {{udepositpaid}},\r\n\t\"bookingdates\" : {\r\n    \t\"checkin\" : \"{{ucheckin}}\",\r\n    \t\"checkout\" : \"{{ucheckout}}\"\r\n\t},\r\n\t\"additionalneeds\" : \"{{uextraNeeds}}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseurl}}/booking/{{id}}",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"booking",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verification After Update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const id = pm.environment.get(\"id\")\r",
+							"var responseCode= pm.response.code\r",
+							"console.log(responseCode)\r",
+							"\r",
+							"if(responseCode==200){\r",
+							"\r",
+							"    var fiberdata= pm.response.json()\r",
+							"    pm.test(`Modification of Booking ID-${id}`)\r",
+							"    pm.test(\"First Name Updated\", function(){ \r",
+							"        pm.expect(pm.environment.get(\"ufirstname\")).to.eql(fiberdata.firstname)\r",
+							"    })\r",
+							"\r",
+							"    pm.test(\"Last Name Updated\", function(){\r",
+							"        pm.expect(pm.environment.get(\"ulastname\")).to.eql(fiberdata.lastname)\r",
+							"    })\r",
+							"\r",
+							"    pm.test(\"Checkin Date Updated\", function(){\r",
+							"     pm.expect(pm.environment.get(\"ucheckin\")).to.eql(fiberdata.bookingdates.checkin)\r",
+							"    })\r",
+							"    pm.test(\"Checkput Date Updated\", function(){\r",
+							"     pm.expect(pm.environment.get(\"ucheckout\")).to.eql(fiberdata.bookingdates.checkout)\r",
+							"    })\r",
+							"    pm.test(\"Total Price Updated\", function(){\r",
+							"        pm.expect(pm.environment.get(\"utotalprice\")).to.eql(fiberdata.totalprice)\r",
+							"    })\r",
+							"    pm.test(\"Deposit Paid Updated\", function(){\r",
+							"        pm.expect(pm.environment.get(\"udepositpaid\")).to.eql(fiberdata.depositpaid.toString())\r",
+							"    })\r",
+							"\r",
+							"}else if(responseCode==404){\r",
+							"    pm.test(\"Not Found\")\r",
+							"}else if(responseCode==500){\r",
+							"    pm.test(\"Server Error\")\r",
+							"}else {\r",
+							"  pm.test(\"Unexpected Status Code\", function () {\r",
+							"    pm.expect(responseCode).to.be.oneOf([200, 404, 500])\r",
+							"  })\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseurl}}/booking/{{id}}",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"booking",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Partial Update",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							"const moment = require('moment');\r",
+							"\r",
+							"// Get the current date\r",
+							"const today = moment();\r",
+							"\r",
+							"// Define the desired update offset (number of days to add)\r",
+							"const updateOffset = 10;  // Adjust this value as needed\r",
+							"\r",
+							"// Calculate the updated check-in and check-out dates\r",
+							"const updatedCheckin = today.add(updateOffset, 'days').format('YYYY-MM-DD');\r",
+							"const updatedCheckout = today.add(updateOffset + 3, 'days').format('YYYY-MM-DD');  // Add offset + 3 days\r",
+							"\r",
+							"// Set the updated check-in and check-out dates in the environment\r",
+							"pm.environment.set(\"pcheckin\", updatedCheckin);\r",
+							"pm.environment.set(\"pcheckout\", updatedCheckout);\r",
+							"\r",
+							"const service = [\"Pet Service\", \"Tour Guide\", \"Rental Car\"]\r",
+							"const selected = service[Math.floor(Math.random() * service.length)]\r",
+							"pm.environment.set(\"pextraNeeds\", selected)\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const id = pm.environment.get(\"id\")\r",
+							"console.log(responseCode)\r",
+							"switch (pm.response.code)\r",
+							"{\r",
+							"  case 200:\r",
+							"            pm.test(`Partial Details Modification of Booking ID- ${id}.`)\r",
+							"        break\r",
+							"        default:\r",
+							"        pm.test('Server Error')\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token={{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"bookingdates\" : {\r\n    \t\"checkin\" : \"{{pcheckin}}\",\r\n    \t\"checkout\" : \"{{pcheckout}}\"\r\n\t},\r\n\t\"additionalneeds\" : \"{{pextraNeeds}}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseurl}}/booking/{{id}}",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"booking",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verification Partial Update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"const id = pm.environment.get(\"id\")\r",
+							"var responseCode= pm.response.code\r",
+							"console.log(responseCode)\r",
+							"// Handle the response based on the code\r",
+							"if(responseCode==200){\r",
+							"    // Parse the response as JSON\r",
+							"    var fiberdata= pm.response.json()\r",
+							"     pm.test(`Booking ID-${id}`)\r",
+							"    // Test validations for each data point\r",
+							"\r",
+							"    pm.test(\"Modified Checkin Date Validation\", function(){\r",
+							"     pm.expect(pm.environment.get(\"pcheckin\")).to.eql(fiberdata.bookingdates.checkin)\r",
+							"    })\r",
+							"    pm.test(\"Modified Checkput Date Validation\", function(){\r",
+							"     pm.expect(pm.environment.get(\"pcheckout\")).to.eql(fiberdata.bookingdates.checkout)\r",
+							"    })\r",
+							"    pm.test(\"Modified Additional Need Validation\", function(){\r",
+							"     pm.expect(pm.environment.get(\"pextraNeeds\")).to.eql(fiberdata.additionalneeds)\r",
+							"    })\r",
+							"\r",
+							"}else if(responseCode==404){\r",
+							"    pm.test(\"Not Found\")\r",
+							"}else if(responseCode==500){\r",
+							"    pm.test(\"Server Error\")\r",
+							"}else {\r",
+							"  pm.test(\"Unexpected Status Code\", function () {\r",
+							"    pm.expect(responseCode).to.be.oneOf([200, 404, 500])\r",
+							"  })\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseurl}}/booking/{{id}}",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"booking",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Booking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"const id = pm.environment.get(\"id\")\r",
+							"switch(pm.response.code)\r",
+							"    {\r",
+							"        case 200,201:\r",
+							"            pm.test(`Successfully Deleted Details of Booking ID- ${id}.`)\r",
+							"        break\r",
+							"         default:\r",
+							"            pm.test(`Unable To Delete Details of Booking ID- ${id}`)\r",
+							"    }"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token={{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseurl}}/booking/{{id}}",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"booking",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verification After Delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const id = pm.environment.get(\"id\")\r",
+							"var responseCode= pm.response.code\r",
+							"console.log(responseCode)\r",
+							"\r",
+							"if(responseCode==200){\r",
+							"\r",
+							"    var fiberdata= pm.response.json()\r",
+							"    pm.test(`Unsuccesful to delete Booking ID-${id}`)\r",
+							"\r",
+							"}else if(responseCode==404){\r",
+							"    pm.test(`Successfully Deleted Booking ID-${id}`)\r",
+							"}else if(responseCode==500){\r",
+							"    pm.test(`Server Error`)\r",
+							"}else {\r",
+							"  pm.test(`Unexpected Status Code`, function () {\r",
+							"    pm.expect(responseCode).to.be.oneOf([200, 404, 500])\r",
+							"  })\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseurl}}/booking/{{id}}",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"booking",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
