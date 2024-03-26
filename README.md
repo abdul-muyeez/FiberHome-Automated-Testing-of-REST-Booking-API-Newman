@@ -1,47 +1,61 @@
 # FiberHome Automated Testing of REST Booking API Newman
 This FiberHome project aims to automate the testing of a REST booking API using Postman and Newman. By automating the testing process, I ensure consistent and reliable validation of the API endpoints, reducing manual effort and enabling faster feedback on changes.
-# Features
-•	Comprehensive API testing suite covering various HTTP methods including GET, POST, PUT, PATCH, and DELETE.<br/>
-•	Requests with different configurations such as request bodies, pre-request scripts, and tests to ensure comprehensive API endpoint validation.<br/>
-•	Easy-to-use Postman collections for executing tests locally or integrating into continuous integration pipelines.<br/>
-•	Detailed test scripts to validate responses and ensure API functionality meets requirements.<br/>
-•	Modularized structure for easy maintenance and scalability of test suites.
-# API Documentation
-  https://documenter.getpostman.com/view/33749765/2sA35D6Pce
-# Technology Used
-  1.	**Postman:** Used for creating and managing API requests and collections.
-  2.	**Newman:** Command-line collection runner for Postman, allowing for execution in CI/CD pipelines or terminal environments.
-# Prerequisite
-  Before running the tests, ensure you have the following installed:</br>
-    **•	Postman:** <a href="https://www.postman.com/downloads/">Download and install Postman</a> on your machine.</br>
-    **•	Node.js:** <a href="https://nodejs.org/en">Install Node.js</a> to be able to run Newman.</br>
-    **•	Newman:** Html Report Library
-# Installation
-  **1. Import the Postman collection:** </br>
-        • Open Postman </br>
-        •	Click on the Import button</br>
-        • Select the file from the repository</br>
- **2. Import the Postman environment:** </br>
-        •	In Postman, click on the gear icon in the top right corner.</br>
-        •	Select Import and choose the file.</br>
- **3. Newman and Report Installation Process:** <br/>
-        •	Newman Install Command</br>
-             `npm install -g newman` <br/>
-        •	Newman Html Report Install Command:<br/>
-             `npm install -g newman-reporter-htmlextra`<br/>
-**4. Colne the repository**<br/>
-              `git clone https://github.com/abdul-muyeez/FiberHome-Automated-Testing-of-REST-Booking-API-Newman`
-# Usage
- **1. Select Environment:** <br/>
-        In Postman, select the appropriate environment (e.g., Development, Production) from the top-right dropdown.<br/>
- **2. Run Collection:** <br/>
-        Select the imported collection from the Collections sidebar.<br/>
-        Click on the Runner button to open the collection runner.<br/>
-        Select the desired environment.<br/>
-        Click Start Test to run the collection.<br/>
- **3. View Results:** <br/>
-        Once the tests are complete, view the results in the Runner tab.<br/>
-        Detailed test results can be viewed for each request.<br/>
+### **Features**
+- Comprehensive API testing suite covering various HTTP methods including GET, POST, PUT, PATCH, and DELETE.
+- Requests with different configurations such as request bodies, pre-request scripts, and tests to ensure comprehensive API endpoint validation.
+- Easy-to-use Postman collections for executing tests locally or integrating into continuous integration pipelines.
+- Detailed test scripts to validate responses and ensure API functionality meets requirements.
+- Modularized structure for easy maintenance and scalability of test suites.
+
+### **API Documentation**
+```console
+ https://documenter.getpostman.com/view/33749765/2sA35D6Pce
+ ```
+ 
+### **Technology Used**
+   - **Postman:** Used for creating and managing API requests and collections.
+   - **Newman:** Command-line collection runner for Postman, allowing for execution in CI/CD pipelines or terminal environments.
+
+### **Prerequisite**
+  Before running the tests, ensure you have the following installed:
+  - **Postman:** <a href="https://www.postman.com/downloads/">Download and install Postman</a> on your machine.
+  - **Node.js:** <a href="https://nodejs.org/en">Install Node.js</a> to be able to run Newman.
+  - **Newman:** Html Report Library
+
+### **Installation**
+
+1. Postman: If you haven't already, [download and install Postman.](https://www.postman.com/downloads/)
+2. Clone the repository:
+    ```console 
+        git clone https://github.com/abdul-muyeez/FiberHome-Automated-Testing-of-REST-Booking-API-Newman
+    ```
+3. Import the Postman collection:
+    - Open Postman.
+    - Click on the Import button.
+    - Select the file from the repository.
+4. Import the Postman environment:
+    - In Postman, click on the gear icon in the top right corner.
+    - Select **Import** and choose the file.
+5. Newman and Report Installation Process:
+    - Newman Install Command:
+     ```console 
+      npm install -g newman
+    ```
+    - Newman Html Report Install Command:
+     ```console 
+      npm install -g newman-reporter-htmlextra
+    ```
+### **Usage**
+1. Select Environment:
+    -   In Postman, select the appropriate environment (e.g., Development, Production) from the top-right dropdown.
+2. Run Collection:
+    -   Select the imported collection from the Collections sidebar.
+    -   Click on the Runner button to open the collection runner.
+    -   Select the desired environment.
+    -   Click Start Test to run the collection.
+3. View Results:
+    -   Once the tests are complete, view the results in the Runner tab.
+    -   Detailed test results can be viewed for each request.
 # Testing
   ### 1. Create Booking.
   #### URL: https://restful-booker.herokuapp.com/booking/
@@ -580,6 +594,8 @@ Not Found
 ![image](https://github.com/abdul-muyeez/FiberHome-Automated-Testing-of-REST-Booking-API-Newman/assets/136342156/5a5f076a-9651-4110-a7f4-3d54c3147299)
 ![image](https://github.com/abdul-muyeez/FiberHome-Automated-Testing-of-REST-Booking-API-Newman/assets/136342156/c38c61fc-7bc4-4c8d-a0e9-7939b92427d3)
 ![image](https://github.com/abdul-muyeez/FiberHome-Automated-Testing-of-REST-Booking-API-Newman/assets/136342156/7f335aec-b33d-40c6-bda9-4c5e62d5c9b5)
+![image](https://github.com/abdul-muyeez/FiberHome-Automated-Testing-of-REST-Booking-API-Newman/assets/136342156/32cda565-e085-40b3-b40d-6a1789f22f9d)
+![image](https://github.com/abdul-muyeez/FiberHome-Automated-Testing-of-REST-Booking-API-Newman/assets/136342156/4d884888-6c85-4680-b1c5-4d08cbd28e19)
 
 ## Have a good look in this project
 
