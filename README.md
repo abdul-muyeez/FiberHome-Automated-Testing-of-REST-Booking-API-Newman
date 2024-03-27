@@ -16,7 +16,7 @@ This FiberHome project aims to automate the testing of a REST booking API using 
    - **Postman:** Used for creating and managing API requests and collections.
    - **Newman:** Command-line collection runner for Postman, allowing for execution in CI/CD pipelines or terminal environments.
 
-### **Prerequisite**
+### **Pre-requisite**
   Before running the tests, ensure you have the following installed:
   - **Postman:** <a href="https://www.postman.com/downloads/">Download and install Postman</a> on your machine.
   - **Node.js:** <a href="https://nodejs.org/en">Install Node.js</a> to be able to run Newman.
