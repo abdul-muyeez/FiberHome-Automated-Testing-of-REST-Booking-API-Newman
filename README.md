@@ -1,28 +1,29 @@
 # FiberHome Automated Testing of REST Booking API Newman
 This FiberHome project aims to automate the testing of a REST booking API using Postman and Newman. By automating the testing process, I ensure consistent and reliable validation of the API endpoints, reducing manual effort and enabling faster feedback on changes.
-### **Features**
+
+## **Features**
 - Comprehensive API testing suite covering various HTTP methods including GET, POST, PUT, PATCH, and DELETE.
 - Requests with different configurations such as request bodies, pre-request scripts, and tests to ensure comprehensive API endpoint validation.
 - Easy-to-use Postman collections for executing tests locally or integrating into continuous integration pipelines.
 - Detailed test scripts to validate responses and ensure API functionality meets requirements.
 - Modularized structure for easy maintenance and scalability of test suites.
 
-### **API Documentation**
+## **API Documentation**
 ```console
  https://documenter.getpostman.com/view/33749765/2sA35D6Pce
  ```
  
-### **Technology Used**
+## **Technology Used**
    - **Postman:** Used for creating and managing API requests and collections.
    - **Newman:** Command-line collection runner for Postman, allowing for execution in CI/CD pipelines or terminal environments.
 
-### **Pre-requisite**
+## **Pre-requisite**
   Before running the tests, ensure you have the following installed:
   - **Postman:** <a href="https://www.postman.com/downloads/">Download and install Postman</a> on your machine.
   - **Node.js:** <a href="https://nodejs.org/en">Install Node.js</a> to be able to run Newman.
   - **Newman:** Html Report Library
 
-### **Installation**
+## **Installation**
 
 1. Postman: If you haven't already, [download and install Postman.](https://www.postman.com/downloads/)
 2. Clone the repository:
@@ -45,7 +46,7 @@ This FiberHome project aims to automate the testing of a REST booking API using 
      ```console 
       npm install -g newman-reporter-htmlextra
     ```
-### **Usage**
+## **Usage**
 1. Select Environment:
     -   In Postman, select the appropriate environment (e.g., Development, Production) from the top-right dropdown.
 2. Run Collection:
@@ -56,7 +57,7 @@ This FiberHome project aims to automate the testing of a REST booking API using 
 3. View Results:
     -   Once the tests are complete, view the results in the Runner tab.
     -   Detailed test results can be viewed for each request.
-# Testing
+## Testing
   ### 1. Create Booking.
   #### URL: https://restful-booker.herokuapp.com/booking/
   #### METHOD: POST
